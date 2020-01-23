@@ -2,18 +2,27 @@ Rake::Task['db:drop'].invoke
 Rake::Task['db:create'].invoke
 Rake::Task['db:migrate'].invoke
 
-categories = ['Mac', 'iPad', 'iPhone', 'Watch', 'TV', 'Music']
+# categories = ['Mac', 'iPad', 'iPhone', 'Watch', 'TV', 'Music']
+
+categories = [
+  {
+    name: 'Mac',
+    products: ['MacBook', 'MacBook Pro']
+  }, {
+    name: 'iPad',
+    products: ['iPad', 'iPad Pro', 'iPad Mini']
+  }, {
+    name: 'iPhone',
+    products: ['iPhone 11', 'iPhone 11 Pro']
+  }
+]
 
 categories.each do |category|
-  c = Category.create!(name: category)
+  c = Category.create!(name: category[:name])
   puts "Category with name #{c.name}"
-end
 
-products = ['MacBook', 'MacBook Pro']
-
-products.each do |product|
-  category = Category.find_by_name('Mac')
-  # Product.create(name: product, category_id: category.id)
-  p = category.products.create!(name: product)
-  puts "Product with name #{p.name} just created in category with name #{p.category.name}"
+  category[:products].each do |product|
+    p = c.products.create!(name: product)
+    puts "Product with name #{p.name} just created in category with name #{p.category.name}"
+  end
 end
