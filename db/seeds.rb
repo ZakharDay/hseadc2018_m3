@@ -1,10 +1,4 @@
-Rake::Task['db:drop'].invoke
-Rake::Task['db:create'].invoke
-Rake::Task['db:migrate'].invoke
-
-# categories = ['Mac', 'iPad', 'iPhone', 'Watch', 'TV', 'Music']
-
-categories = [
+@categories = [
   {
     name: 'Mac',
     products: ['MacBook', 'MacBook Pro']
@@ -17,12 +11,43 @@ categories = [
   }
 ]
 
-categories.each do |category|
+def seed
+  reset_db
+  create_categories(@categories)
+end
+
+def reset_db
+  Rake::Task['db:drop'].invoke
+  Rake::Task['db:create'].invoke
+  Rake::Task['db:migrate'].invoke
+end
+
+def create_categories(categories)
+  categories.each { |category| create_category(category) }
+
+  # categories.each do |category|
+  #   create_category(category)
+  # end
+end
+
+def create_category(category)
   c = Category.create!(name: category[:name])
   puts "Category with name #{c.name}"
 
-  category[:products].each do |product|
-    p = c.products.create!(name: product)
-    puts "Product with name #{p.name} just created in category with name #{p.category.name}"
-  end
+  create_category_products(c, category[:products])
 end
+
+def create_category_products(category, products)
+  products.each { |product| create_category_product(category, product) }
+
+  # products.each do |product|
+  #   create_category_product(category, product)
+  # end
+end
+
+def create_category_product(category, product)
+  p = category.products.create!(name: product)
+  puts "Product with name #{p.name} just created in category with name #{p.category.name}"
+end
+
+seed
