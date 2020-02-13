@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @product_item.product_id %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @product_item.color_id %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @product_item.serial_number %>
+</p>
+
+<%= link_to 'Edit', edit_product_item_path(@product_item) %> |
+<%= link_to 'Back', product_items_path %>
