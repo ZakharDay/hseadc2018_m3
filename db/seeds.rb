@@ -45,6 +45,11 @@ def seed
   @carts = Cart.all
 
   fill_carts_with_products
+  @carts = Cart.all
+
+  make_few_orders
+  make_one_sale
+  cancel_one_order
 end
 
 def reset_db
@@ -152,6 +157,46 @@ def create_cart_item(cart, product_item)
   product = product_item.product
   cart_item = CartItem.create!(cart_id: cart.id, product_id: product.id, product_item_id: product_item.id, price: product.price)
   puts "Cart Item just created with id #{ cart_item.id } for product with id #{ cart_item.product.id } for product item with id #{ cart_item.product_item.id } with price #{ cart_item.price }"
+end
+
+def make_few_orders
+  @carts.sample(3).each do |cart|
+    order = Order.create!(cart_id: cart.id, user_id: cart.user_id)
+    puts "Order with id #{order.id} just created"
+
+    cart.cart_items.each do |cart_item|
+      order_item = order.order_items.create!(product_id: cart_item.product_id, product_item_id: cart_item.product_item_id, price: cart_item.price)
+      puts "OrderItem with id #{order_item.id} just created"
+
+      product_item = cart_item.product_item
+      product_item.status = 'reserved'
+      product_item.save
+    end
+  end
+end
+
+def make_one_sale
+  order = Order.last
+  order.status = 'delivered'
+  order.save
+
+  order.order_items.each do |order_item|
+    product_item = order_item.product_item
+    product_item.status = 'sold'
+    product_item.save
+  end
+end
+
+def cancel_one_order
+  order = Order.first
+  order.status = 'canceled'
+  order.save
+
+  order.order_items.each do |order_item|
+    product_item = order_item.product_item
+    product_item.status = 'available'
+    product_item.save
+  end
 end
 
 seed
