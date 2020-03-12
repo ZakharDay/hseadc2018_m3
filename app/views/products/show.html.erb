@@ -1,4 +1,18 @@
+<% content_for :breadcrumbs do %>
+  <menu class="breadcrumbs">
+    <span><%= link_to @product.category.name, @product.category %></span>
+    <span>/</span>
+    <span><%= @product.name %></span>
+    <hr>
+  </menu>
+<% end %>
+
 <p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @product.category.name %>
+</p>
 
 <p>
   <strong>Name:</strong>
@@ -15,5 +29,22 @@
   <%= @product.price %>
 </p>
 
-<%= link_to 'Edit', edit_product_path(@product) %> |
+<h2>Colors</h2>
+
+<ul>
+  <% @product.colors.each do |color| %>
+    <% product_items = @product.product_items.where(color_id: color.id) %>
+
+    <li>
+      <%= count_products_by_color(color, @product) %>
+      <%= link_to 'Add to cart', cart_cart_items_path(@cart, product_id: @product.id, product_item_id: product_items[0].id, price: @product.price), method: :post %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_category_product_path(@product.category, @product) %> |
 <%= link_to 'Back', products_path %>
+
+<hr>
+
+<%= link_to 'New Product Item', new_category_product_product_item_path(@product.category, @product) %>

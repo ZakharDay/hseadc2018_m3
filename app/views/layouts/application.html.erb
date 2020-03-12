@@ -10,6 +10,16 @@
   </head>
 
   <body>
+    Cart: <%= @cart.cart_items.count %>
+    <%= link_to 'Order', orders_path(user_id: @cart.user_id, cart_id: @cart.id), method: :post %>
+
+    <menu class="O_Menubar">
+      <%= link_to 'Categories', categories_path %>
+      <%= link_to 'Products', products_path %>
+    </menu>
+
+    <%= yield :breadcrumbs %>
+
     <%= yield %>
   </body>
 </html>

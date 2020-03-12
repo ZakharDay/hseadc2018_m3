@@ -24,11 +24,13 @@ class CartItemsController < ApplicationController
   # POST /cart_items
   # POST /cart_items.json
   def create
-    @cart_item = CartItem.new(cart_item_params)
+    # @cart_item = CartItem.new(cart_item_params)
+    @cart_item = CartItem.new(cart_id: params[:cart_id], product_id: params[:product_id], product_item_id: params[:product_item_id], price: params[:price])
 
     respond_to do |format|
       if @cart_item.save
-        format.html { redirect_to @cart_item, notice: 'Cart item was successfully created.' }
+        @product = Product.find(params[:product_id])
+        format.html { redirect_to category_product_path(@product.category, @product), notice: 'Cart item was successfully created.' }
         format.json { render :show, status: :created, location: @cart_item }
       else
         format.html { render :new }

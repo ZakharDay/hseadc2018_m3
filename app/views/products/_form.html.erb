@@ -12,6 +12,11 @@
   <% end %>
 
   <div class="field">
+    <%= form.label :category_id %>
+    <%= form.select :category_id, Category.all.collect { |c| [c.name, c.id] } %>
+  </div>
+
+  <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
@@ -25,6 +30,9 @@
     <%= form.label :price %>
     <%= form.number_field :price %>
   </div>
+
+  <h2>Colors</h2>
+  <%= form.collection_check_boxes :color_ids, Color.all, :id, :name %>
 
   <div class="actions">
     <%= form.submit %>

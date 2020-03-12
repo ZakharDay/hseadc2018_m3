@@ -2,4 +2,8 @@
 
 <%= render 'form', product: @product %>
 
-<%= link_to 'Back', products_path %>
+<% if params[:category_id] %>
+  <%= link_to 'Back', category_path(params[:category_id]) %>
+<% else %>
+  <%= link_to 'Back', products_path %>
+<% end %>

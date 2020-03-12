@@ -24,10 +24,20 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = Order.new(cart_id: params[:cart_id], user_id: params[:user_id])
 
     respond_to do |format|
       if @order.save
+        @order.cart.cart_items.each do |cart_item|
+          order_item = @order.order_items.create!(product_id: cart_item.product_id, product_item_id: cart_item.product_item_id, price: cart_item.price)
+
+          product_item = cart_item.product_item
+          product_item.status = 'reserved'
+          product_item.save
+
+          cart_item.destroy
+        end
+
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else

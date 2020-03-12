@@ -1,12 +1,24 @@
 Rails.application.routes.draw do
+  get 'welcome/index'
+
   resources :orders
   resources :order_items
-  resources :cart_items
-  resources :carts
+
+  resources :carts do
+    resources :cart_items
+  end
+
   resources :users
-  resources :product_items
   resources :colors
-  resources :categories
+
   resources :products
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  resources :categories do
+    resources :products do
+      resources :product_items
+    end
+  end
+
+  root 'welcome#index'
+
 end

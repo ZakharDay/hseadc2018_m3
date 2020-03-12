@@ -14,7 +14,9 @@ class ProductItemsController < ApplicationController
 
   # GET /product_items/new
   def new
-    @product_item = ProductItem.new
+    @product = Product.find(params[:product_id])
+    @category = Category.find(params[:category_id])
+    @product_item = @product.product_items.new
   end
 
   # GET /product_items/1/edit
@@ -24,11 +26,12 @@ class ProductItemsController < ApplicationController
   # POST /product_items
   # POST /product_items.json
   def create
-    @product_item = ProductItem.new(product_item_params)
+    product = Product.find(params[:product_id])
+    @product_item = product.product_items.new(product_item_params)
 
     respond_to do |format|
       if @product_item.save
-        format.html { redirect_to @product_item, notice: 'Product item was successfully created.' }
+        format.html { redirect_to category_product_path(product.category, product), notice: 'Product item was successfully created.' }
         format.json { render :show, status: :created, location: @product_item }
       else
         format.html { render :new }

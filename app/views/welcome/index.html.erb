@@ -1,0 +1,17 @@
+<% Category.all.each do |category| %>
+  <div class="categoryTeaser">
+    <h2><%= link_to category.name, category %></h2>
+
+    <% category.products.sample(3).each do |product| %>
+      <div class="productTeaser">
+        <h3><%= link_to product.name, category_product_path(category, product) %></h3>
+        <%= content_tag :p, product.description if product.description != '' %>
+
+        <div class="price">
+          <%= number_to_currency(product.price, unit: "₽", separator: ",", delimiter: " ", format: "%n %u", precision: 0) %>
+        </div>
+        <br><br>
+      </div>
+    <% end %>
+  </div>
+<% end %>
