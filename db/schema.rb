@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_13_095429) do
+ActiveRecord::Schema.define(version: 2020_04_09_102309) do
 
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_095429) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "uuid"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -32,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_095429) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "cover"
   end
 
   create_table "colors", force: :cascade do |t|
@@ -62,6 +64,13 @@ ActiveRecord::Schema.define(version: 2020_02_13_095429) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "product_images", force: :cascade do |t|
+    t.integer "product_id"
+    t.string "image"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "product_items", force: :cascade do |t|
     t.integer "product_id"
     t.integer "color_id"
@@ -84,6 +93,14 @@ ActiveRecord::Schema.define(version: 2020_02_13_095429) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.boolean "admin", default: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

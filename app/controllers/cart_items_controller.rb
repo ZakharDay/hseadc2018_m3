@@ -1,4 +1,5 @@
 class CartItemsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_cart_item, only: [:show, :edit, :update, :destroy]
 
   # GET /cart_items
@@ -25,11 +26,11 @@ class CartItemsController < ApplicationController
   # POST /cart_items.json
   def create
     # @cart_item = CartItem.new(cart_item_params)
-    @cart_item = CartItem.new(cart_id: params[:cart_id], product_id: params[:product_id], product_item_id: params[:product_item_id], price: params[:price])
+    @cart_item = CartItem.new(cart_id: params[:cart_item][:cart_id], product_id: params[:cart_item][:product_id], product_item_id: params[:cart_item][:product_item_id], price: params[:cart_item][:price])
 
     respond_to do |format|
       if @cart_item.save
-        @product = Product.find(params[:product_id])
+        @product = Product.find(params[:cart_item][:product_id])
         format.html { redirect_to category_product_path(@product.category, @product), notice: 'Cart item was successfully created.' }
         format.json { render :show, status: :created, location: @cart_item }
       else

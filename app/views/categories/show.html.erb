@@ -17,6 +17,14 @@
   <%= @category.description %>
 </p>
 
+<% if @category.cover.present? %>
+  <p>
+    <strong>Cover:</strong>
+    <%= image_tag @category.cover.url, width: 200 %>
+    <%= image_tag @category.cover.thumb.url %>
+  </p>
+<% end %>
+
 <%= link_to 'Edit', edit_category_path(@category) %> |
 <%= link_to 'Back', categories_path %>
 

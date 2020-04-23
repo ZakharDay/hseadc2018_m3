@@ -1,6 +1,6 @@
 <p>
   <strong>Name:</strong>
-  <%= product.name %>
+  <%= link_to product.name, category_product_path(product.category, product) %>
 </p>
 
 <p>

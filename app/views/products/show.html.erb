@@ -29,6 +29,17 @@
   <%= @product.price %>
 </p>
 
+<h2>Images</h2>
+<% @product.product_images.each do |product_image| %>
+  <% if product_image.image.present? %>
+    <p>
+      <strong>Cover:</strong>
+      <%= image_tag product_image.image.url, width: 200 %>
+      <%= image_tag product_image.image.thumb.url %>
+    </p>
+  <% end %>
+<% end %>
+
 <h2>Colors</h2>
 
 <ul>
@@ -37,7 +48,7 @@
 
     <li>
       <%= count_products_by_color(color, @product) %>
-      <%= link_to 'Add to cart', cart_cart_items_path(@cart, product_id: @product.id, product_item_id: product_items[0].id, price: @product.price), method: :post %>
+      <%= link_to 'Add to cart', cart_cart_items_path(@cart, cart_item: { cart_id: @cart.id, product_id: @product.id, product_item_id: product_items[0].id, price: @product.price }), method: :post %>
     </li>
   <% end %>
 </ul>
@@ -48,3 +59,5 @@
 <hr>
 
 <%= link_to 'New Product Item', new_category_product_product_item_path(@product.category, @product) %>
+<br>
+<%= link_to 'New Product Image', new_category_product_product_image_path(@product.category, @product) %>

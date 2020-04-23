@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get 'welcome/index'
 
   resources :orders
@@ -11,11 +12,14 @@ Rails.application.routes.draw do
   resources :users
   resources :colors
 
-  resources :products
+  resources :products do
+    resources :product_images
+  end
 
   resources :categories do
     resources :products do
       resources :product_items
+      resources :product_images
     end
   end
 

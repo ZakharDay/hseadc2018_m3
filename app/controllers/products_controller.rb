@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  load_and_authorize_resource
+  # layout :render_layout
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   # GET /products
@@ -10,6 +12,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    # render template: 'products/test'
   end
 
   # GET /products/new
@@ -74,5 +77,15 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:category_id, :name, :description, :price, color_ids: [])
+    end
+
+    def render_layout
+      if action_name == 'show'
+        'product_show'
+      elsif action_name == 'edit'
+        'product_edit'
+      else
+        'application'
+      end
     end
 end

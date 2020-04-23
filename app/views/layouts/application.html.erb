@@ -10,12 +10,24 @@
   </head>
 
   <body>
-    Cart: <%= @cart.cart_items.count %>
-    <%= link_to 'Order', orders_path(user_id: @cart.user_id, cart_id: @cart.id), method: :post %>
-
     <menu class="O_Menubar">
       <%= link_to 'Categories', categories_path %>
       <%= link_to 'Products', products_path %>
+
+      <%# if @cart %>
+        Cart: <%= @cart.cart_items.count %>
+        <br>
+        UUID: <%= @cart.uuid %>
+        <br>
+        UUID from cookies: <%= cookies[:cart_uuid] %>
+        <%#= link_to 'Order', orders_path(user_id: @cart.user_id, cart_id: @cart.id), method: :post, class: 'A_Button' %>
+      <%# end %>
+
+      <% if user_signed_in? %>
+        <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+      <% else %>
+        <%= link_to('Login', new_user_session_path) %>
+      <% end %>
     </menu>
 
     <%= yield :breadcrumbs %>

@@ -5,18 +5,23 @@
 @users = nil
 @carts = nil
 
-@users_names = ['Yo', 'Rap', 'Lobnya']
+@users_names = [
+  ['Yo', 'user1@test.com'],
+  ['Rap', 'user2@test.com'],
+  ['Lobnya', 'user3@test.com'],
+  ['Admin', 'admin@test.com']
+]
 
 @categories_names = [
   {
     name: 'Mac',
-    products: ['MacBook', 'MacBook Pro']
+    products: [['MacBook', 'product_1.jpg'], ['MacBook Pro', 'product_2.jpg']]
   }, {
     name: 'iPad',
-    products: ['iPad', 'iPad Pro', 'iPad Mini']
+    products: [['iPad', 'product_3.jpg'], ['iPad Pro', 'product_1.jpg'], ['iPad Mini', 'product_2.jpg']]
   }, {
     name: 'iPhone',
-    products: ['iPhone 11', 'iPhone 11 Pro']
+    products: [['iPhone 11', 'product_1.jpg'], ['iPhone 11 Pro', 'product_2.jpg']]
   }
 ]
 
@@ -72,7 +77,7 @@ def create_categories
 end
 
 def create_category(category)
-  c = Category.create!(name: category[:name])
+  c = Category.create!(name: category[:name], cover: upload_random_cover)
   puts "Category with name #{c.name}"
 end
 
@@ -91,8 +96,16 @@ def create_category_products(category, products)
 end
 
 def create_category_product(category, product)
-  p = category.products.create!(name: product, price: (100..100000).to_a.sample)
+  p = category.products.create!(name: product[0], price: (100..100000).to_a.sample)
   puts "Product with name #{p.name} just created in category with name #{p.category.name}"
+
+  create_product_image(p.id, product[1])
+end
+
+def create_product_image(product_id, filename)
+  product = Product.find(product_id)
+  product_image = product.product_images.create!(image: upload_product_image(filename))
+  puts "ProductImage just created with id #{product_image.id}"
 end
 
 def create_products_colors
@@ -130,7 +143,20 @@ def create_product_item(product, color)
 end
 
 def create_users
-  @users_names.each { |user_name| puts "User just created with id #{ User.create!(name: user_name).id }" }
+  @users_names.each do |user|
+    user_data = {
+      name: user[0],
+      email: user[1],
+      password: 'testtest',
+      password_confirmation: 'testtest'
+    }
+
+    user_data[:admin] = true if user[0] == 'Admin'
+
+    u = User.create!(user_data)
+
+    puts "User just created with id #{ u.id }"
+  end
 end
 
 def create_users_carts
@@ -197,6 +223,18 @@ def cancel_one_order
     product_item.status = 'available'
     product_item.save
   end
+end
+
+def upload_random_cover
+  uploader = CategoryCoverUploader.new(Category.new, :cover)
+  uploader.cache!(File.open(Dir.glob(File.join(Rails.root, 'public/autoupload/category_covers', '*')).sample))
+  uploader
+end
+
+def upload_product_image(filename)
+  uploader = ProductImageUploader.new(ProductImage.new, :image)
+  uploader.cache!(File.open(File.join(Rails.root, 'public/autoupload/product_images', filename)))
+  uploader
 end
 
 seed
