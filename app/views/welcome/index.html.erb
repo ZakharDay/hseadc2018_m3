@@ -5,10 +5,14 @@
     <% category.products.sample(3).each do |product| %>
       <div class="productTeaser">
         <h3><%= link_to product.name, category_product_path(category, product) %></h3>
-        <%= content_tag :p, product.description if product.description != '' %>
+        <%= content_tag(:p, product.description) if product.description != '' %>
 
         <div class="price">
-          <%= number_to_currency(product.price, unit: "₽", separator: ",", delimiter: " ", format: "%n %u", precision: 0) %>
+          <%= product_price(product.price) %>
+        </div>
+
+        <div class="salePrice">
+          <%= sale_price(product.price) %>
         </div>
         <br><br>
       </div>

@@ -11,4 +11,12 @@ module ProductsHelper
     ].join()
   end
 
+  def product_price(price)
+    number_to_currency(price, unit: "₽", separator: ",", delimiter: " ", format: "%n %u", precision: 0)
+  end
+
+  def sale_price(price)
+    product_price(price * 0.9)
+  end
+
 end
