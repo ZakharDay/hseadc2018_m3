@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   load_and_authorize_resource
   # layout :render_layout
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :favourite]
 
   # GET /products
   # GET /products.json
@@ -64,6 +64,19 @@ class ProductsController < ApplicationController
     @product.destroy
     respond_to do |format|
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def favourite
+    if @product.users.where(id: current_user.id).count == 0
+      current_user.favourite_products.create!(product_id: @product.id)
+    else
+      @product.favourite_products.where(user_id: current_user.id).destroy_all
+    end
+
+    respond_to do |format|
+      format.html { redirect_to product_url(@product), notice: '' }
       format.json { head :no_content }
     end
   end

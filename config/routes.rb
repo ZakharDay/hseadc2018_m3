@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions:      'users/sessions',
+    registrations: 'users/registrations'
+  }
+
   get 'welcome/index'
 
   resources :orders
@@ -7,6 +11,10 @@ Rails.application.routes.draw do
 
   resources :carts do
     resources :cart_items
+
+    member do
+      get 'clear'
+    end
   end
 
   resources :users
@@ -14,6 +22,10 @@ Rails.application.routes.draw do
 
   resources :products do
     resources :product_images
+
+    member do
+      get 'favourite'
+    end
   end
 
   resources :categories do

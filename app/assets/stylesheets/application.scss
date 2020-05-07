@@ -2,3 +2,23 @@
 
 @import "components/atoms/*";
 @import "components/organisms/*";
+
+.sidebar {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 300px;
+  background: lightgrey;
+}
+
+.favourites {
+  font-weight: bold;
+
+  &.on {
+    color: green;
+  }
+
+  &.off {
+    color: red;
+  }
+}

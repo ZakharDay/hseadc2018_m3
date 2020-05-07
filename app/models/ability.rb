@@ -17,14 +17,17 @@ class Ability
     elsif user.persisted?
       can :read, Category
       can :read, Product
+      can :favourite, Product
       can :read, Welcome
       can :manage, User, id: user.id
       can :create, CartItem
+      can :clear, Cart
     else
       can :read, Category
       can :read, Product
       can :read, Welcome
       can :create, CartItem
+      can :clear, Cart
 
       # can :read, :all
       # cannot :read, User

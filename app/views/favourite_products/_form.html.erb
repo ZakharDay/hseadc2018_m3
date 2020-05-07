@@ -1,0 +1,27 @@
+<%= form_with(model: favourite_product, local: true) do |form| %>
+  <% if favourite_product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(favourite_product.errors.count, "error") %> prohibited this favourite_product from being saved:</h2>
+
+      <ul>
+        <% favourite_product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :product_id %>
+    <%= form.number_field :product_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

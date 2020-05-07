@@ -3,23 +3,30 @@ class ApplicationController < ActionController::Base
   before_action :set_cart
 
   def set_cart
-    if user_signed_in?
-      @cart = User.first.carts.last
-    else
-      cart_uuid = cookies[:cart_uuid]
+    # Проверить есть ли у гостя уже идентификатор
+    guest_uuid = cookies[:guest_uuid]
 
-      if cart_uuid
-        @cart = Cart.find_by_uuid(cart_uuid)
-
-        unless @cart
-          uuid = SecureRandom.uuid
-          @cart = Cart.create!(uuid: uuid)
-          cookies[:cart_uuid] = uuid
-        end
+    # ЕСЛИ ЕСТЬ ТО
+    if guest_uuid
+      if user_signed_in?
+        @cart = current_user.carts.where(guest_uuid: guest_uuid, cleared: false).last
+        @cart ||= current_user.carts.create!(guest_uuid: guest_uuid)
       else
-        uuid = SecureRandom.uuid
-        @cart = Cart.create!(uuid: uuid)
-        cookies[:cart_uuid] = uuid
+        # Найти последнюю активную корзину этого гостя
+        @cart = Cart.where(guest_uuid: guest_uuid, cleared: false).last
+        @cart ||= Cart.create!(guest_uuid: guest_uuid)
+      end
+    # ЕСЛИ НЕТ ТО
+    else
+      # Тегировать гостевого пользователя (добавить пользователю идентификатор)
+      # Создать ему корзину
+      uuid = SecureRandom.uuid
+      cookies[:guest_uuid] = uuid
+
+      if user_signed_in?
+        @cart = current_user.carts.create!(guest_uuid: uuid)
+      else
+        @cart = Cart.create!(guest_uuid: uuid)
       end
     end
   end

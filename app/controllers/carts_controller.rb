@@ -1,6 +1,6 @@
 class CartsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_cart, only: [:show, :edit, :update, :destroy]
+  before_action :set_cart, only: [:show, :edit, :update, :destroy, :clear]
 
   # GET /carts
   # GET /carts.json
@@ -58,6 +58,15 @@ class CartsController < ApplicationController
     @cart.destroy
     respond_to do |format|
       format.html { redirect_to carts_url, notice: 'Cart was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def clear
+    @cart.update_attribute(:cleared, true)
+    
+    respond_to do |format|
+      format.html { redirect_to root_url, notice: 'Cart was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

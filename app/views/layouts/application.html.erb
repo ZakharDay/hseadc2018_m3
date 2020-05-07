@@ -10,23 +10,42 @@
   </head>
 
   <body>
+    <section class="sidebar">
+      <%
+        guest_uuid = cookies[:guest_uuid]
+        carts = Cart.where(guest_uuid: guest_uuid)
+      %>
+
+      <% carts.each do |cart| %>
+        <% cart.cart_items.each do |cart_item| %>
+          <div>
+            <%= cart_item.product.name %>
+            <%= cart_item.product_item.color.name %>
+            <%= product_price(cart_item.price) %>
+          </div>
+        <% end %>
+      <% end %>
+    </section>
+
     <menu class="O_Menubar">
       <%= link_to 'Categories', categories_path %>
       <%= link_to 'Products', products_path %>
 
-      <%# if @cart %>
+      <% if @cart %>
         Cart: <%= @cart.cart_items.count %>
+        <%= link_to 'Clear cart', clear_cart_path(@cart) %>
         <br>
-        UUID: <%= @cart.uuid %>
+        UUID: <%= @cart.guest_uuid %>
         <br>
-        UUID from cookies: <%= cookies[:cart_uuid] %>
+        UUID from cookies: <%= cookies[:guest_uuid] %>
         <%#= link_to 'Order', orders_path(user_id: @cart.user_id, cart_id: @cart.id), method: :post, class: 'A_Button' %>
-      <%# end %>
+      <% end %>
 
       <% if user_signed_in? %>
         <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
       <% else %>
         <%= link_to('Login', new_user_session_path) %>
+        <%= link_to('Register', new_user_registration_path) %>
       <% end %>
     </menu>
 
