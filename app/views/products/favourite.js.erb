@@ -1,0 +1,13 @@
+id = <%= @product.id %>
+text = 'Add to favourites'
+element = document.getElementById('product_' + id)
+
+if (element.textContent == 'Add to favourites') {
+  text = 'Remove from favourites'
+}
+
+element.textContent = text
+element.classList.toggle('on')
+element.classList.toggle('off')
+
+// element.parentNode.removeChild(element)

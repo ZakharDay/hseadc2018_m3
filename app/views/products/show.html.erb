@@ -9,25 +9,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<% if user_signed_in? %>
-  <p>
-    <%
-      if @product.users.where(id: current_user.id).count == 0
-        text = "Add to favourites"
-        class_name = "favourites on"
-      else
-        text = "Remove from favourites"
-        class_name = "favourites off"
-      end
-    %>
-
-    <%= link_to text, favourite_product_path(@product), class: class_name %>
-  </p>
-<% else %>
-  <p>
-    <%= link_to "Favourite", new_user_registration_path %>
-  </p>
-<% end %>
+<%= render 'products/product_favourite', product: @product %>
 
 <p>
   <strong>Category:</strong>
