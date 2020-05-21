@@ -10,6 +10,11 @@
   %>
 
   <%= link_to text, favourite_product_path(product), class: class_name, id: "product_#{product.id}", remote: true %>
+  <br>
+
+  <p>JS Call from pack</p>
+  <%= class_name += " js" %>
+  <%= link_to text, favourite_product_path(product), class: class_name, id: "product_js_#{product.id}" %>
 <% else %>
   <%= link_to "Favourite", new_user_registration_path %>
 <% end %>

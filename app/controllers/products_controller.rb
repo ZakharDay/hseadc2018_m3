@@ -77,7 +77,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to product_url(@product), notice: '' }
-      format.json { head :no_content }
+      format.json { render 'show' }
       format.js
     end
   end

@@ -15,3 +15,31 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+document.addEventListener("DOMContentLoaded", () => {
+  let buttons = document.getElementsByClassName('js')
+
+  Array.from(buttons).forEach((element) => {
+    element.addEventListener('click', e => {
+      e.preventDefault()
+      const element = e.target
+      const url = element.getAttribute('href')
+
+      fetch(url + '.json')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+
+          let text = 'Add to favourites'
+
+          if (element.textContent == 'Add to favourites') {
+            text = 'Remove from favourites'
+          }
+
+          element.textContent = text
+          element.classList.toggle('on')
+          element.classList.toggle('off')
+        })
+    })
+  })
+})
